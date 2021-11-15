@@ -1,6 +1,6 @@
 --- 
-title: "YOUR TITLE HERE"
-author: "YOUR NAMES HERE"
+title: "Climate Change"
+author: "Yunchen Yao, Zhucheng Zhan, Yifan Jiang"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
 ---
