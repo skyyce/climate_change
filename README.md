@@ -1,4 +1,4 @@
-For EDAV final project, we analyze climate data from NASA and NOAA to explore the general patterns of climate change, such as the change of global temperature and ocean heat. Then we try to figure out both the causes and effects of global warming by analyzing several metrics of climate.
+For EDAV final project, we analyze climate data from NASA and NOAA to explore the general patterns of climate change, such as the change of global temperature and ocean heat. By confirming the general patterns, we then discuss the causes and effects of global warming by analyzing several metrics of climate.
 
 Check out the report of final project using the following link:
 
