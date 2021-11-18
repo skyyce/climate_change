@@ -2,6 +2,12 @@ introduction
 data-sources
 data-transformation
 missing-values
+analysis
+missing-counts-by-column
+missing-counts-by-row
+row-column-missing-patterns-from-heatmap
+missing-partern-investigation
+summary
 results
 interactive-component
 conclusion
