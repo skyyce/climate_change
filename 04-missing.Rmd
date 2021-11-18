@@ -1,7 +1,6 @@
 # Missing values
 There is no missing values found from our data source. Here we use steak survey dataset for analysis.
 
-
 ```{r}
 plot_missing <- function(b,percent=FALSE){
   library(tidyverse)
@@ -76,7 +75,6 @@ plot_missing <- function(b,percent=FALSE){
   }
 }
 ```
-
 
 
 ## Analysis
