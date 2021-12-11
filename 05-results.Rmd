@@ -1,1 +1,109 @@
 # Results
+```{r}
+library(ggplot2)
+library(dplyr)
+library(latex2exp)
+library(tidyverse)
+library(zoo)
+```
+## Main causes of climate change
+In the past more than a hundred years, the global land-ocean temperature kept increasing. So we plan to figure out what leads to the current warming trend. In the following discussion, we explore the effects of natural factors and human activities on temperature.
+
+### Natural causes
+Changes of the Earth's orbit around the sun and the tilt of the Earth's axis define the sequence of glaciation periods and warm periods, and influence the climate on Earth by changing the energy the Earth could receive from the sun. Thus the metrics of Earth's orbit and the solar irradiation are taken into account for the natural causes of climate change. In 1930s, Milutin Milankovitch introduced the concept of Milankovich cycles to describe the changes of Earth's orbit, which includes eccentricity to describe the shape of Earth's orbit, obliquity and precession to describe the Earth's axis. Eccentricity = (aphelion-perihelion)/(aphelion+perihelion). Obliquity is the angle Earth's axis of rotation is tilted as it travels around the Sun. And insolation, which denotes the daily mean solar irradiation at the top of Earth's atmosphere, is introduced to show the irradiation the Earth receives from the sun. The following shows the changes of eccentricity, obliquity and insolation in the past around five thousand years from 2800s BC to now. 
+
+```{r fig.height = 7, fig.width = 10}
+orbit <- read.table("data/raw/milankovitch.data.txt", header = TRUE, skip = 7, sep = "\t")
+orbit_5k <- orbit %>% select(time, eccentricity, obliquity, insolation) %>% transform(time = time + 2021) %>% filter(time <= 2021)
+orbit_pivot <- orbit_5k %>% pivot_longer(cols = !time, names_to = "metric", values_to = "value")
+orbit_pivot$metric <- orbit_pivot$metric %>% fct_relevel("eccentricity","obliquity","insolation")
+labels <- c(`eccentricity`="Eccentricity", `obliquity`="Obliquity (radians)", `insolation` = "Insolation (W/m^2)")
+orbit_pivot %>% ggplot(aes(x = time, y=value)) + geom_smooth(formula = y~x, se = TRUE) +
+  geom_point(color = 'black', size = 0.5, alpha = 0.5) + 
+  facet_wrap(~metric, scales = "free", ncol = 1, labeller = as_labeller(labels)) + theme_grey(16) +
+  ggtitle("Eccentricity, Obliquity, Insolation (2529 BC to 2332 AD)") + xlab("Year") + ylab("") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+```
+
+In the past five thousand year period, all three metrics fluctuates periodically and there is no obviously abnormal curve appears in the recent 200 years, when the global warming occurred, compared to the curve before. It seems that the value of eccentricity increases over a long time span, it is more reasonable to regard it as a normal fluctuation in a long period rather than a sudden change in short term, considering the eccentricity of Earth has a period of about a hundred thousand year.
+
+Then we focus more on the recent 200 years. 
+
+```{r fig.height = 7, fig.width = 10}
+orbit2 <- orbit %>% select(time, eccentricity, obliquity, insolation) %>% transform(time = time + 2021) %>% filter(time <= 2021 & time >= 1800)
+orbit_pivot2 <- orbit2 %>% pivot_longer(cols = !time, names_to = "metric", values_to = "value")
+orbit_pivot2$metric <- orbit_pivot2$metric %>% fct_relevel("eccentricity","obliquity","insolation")
+orbit_pivot2 %>% ggplot(aes(x = time, y=value)) + geom_smooth(formula = y~x, se = TRUE) +
+  geom_point(color = 'black', size = 0.5, alpha = 0.8) + 
+  facet_wrap(~metric, scales = "free", ncol = 1, labeller = as_labeller(labels)) + theme_grey(16) +
+  ggtitle("Eccentricity, Obliquity, Insolation (1800 to 2021)") + xlab("year") + ylab("") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+```
+
+In the short term, both obliquity and isolation have relatively smooth cycle changes while eccentricity has a declining trend. 
+
+To have a better insight of the relationship between these natural causes and temperature, we use the data from 1880 to draw the scatter plots and make linear fitting. In the plot, the color of points denotes the corresponding year.
+```{r fig.height = 7, fig.width = 10}
+temp_yearly <- read.table("data/clean/temp_yearly.csv", header = TRUE, sep = ",")
+temp_orbit_pivot = temp_yearly %>% inner_join(orbit_pivot, by = c("Year" = "time")) %>% drop_na
+temp_orbit_pivot %>% ggplot(aes(value, temp, color = Year)) + 
+  geom_point(alpha = 1, stroke = 0, size = 2) + 
+  geom_smooth(method = "lm", se=FALSE, color="red") + 
+  scale_fill_gradient() +
+  facet_wrap(~metric, scales = "free", ncol = 2, labeller = as_labeller(labels)) +
+  ggtitle("Natural Causes vs Global Temperature (1880 - 2020)") + xlab("") + ylab("Temperature (C)") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+```
+
+From the plot between eccentricity and temperature, we could observe that there is a negative correlations between eccentricity and temperature. The points that gather at the bottom right corner are dark blue, which means in the early time, the temperature is lower while the value of eccentricity is larger, coinciding with the time series plots above. And for points in light blue, they are more likely to gather at top and middle of the left side. It shows that during the nearest time, the value of eccentricity is smaller than the previous but has a relatively stable value, while the temperature still keeps going up. So it seems that the change of Earth's orbit has influenced the temperature to some degree, but it is not the main reason for the continuous warmer weather, at least in the recent 50 years when the value of eccentricity does not change a lot. And we also need to notice that in the other two scatter plots that show relationships of temperature with obliquity and insolation, there is no obvious linear correlations between two variables, indicating that changes of the tilt of Earth's axis and the amount of solar irradiation does not play an important role in warming trend. As mentioned above, the change of Earth's orbit influences climate change by changing the solar irradiation. Although the eccentricity has an obvious change, the irradiation received by Earth keeps fluctuating between a stable value in the recent 200 years, which could be explained by the claim that there are other factors that offset the effect of Earth's orbit. Based on the analysis above, we could hardly draw to the conclusion that there are strong causal relationship between natural factors and global warming.
+
+### Human causes
+The accumulation of greenhouse gas in the atmosphere will make the heat trapped on the surface of Earth, thus lead to the temperature increase on Earth. Since the Industrial Revolution, deforestation, fossil fuel use and other human activities have led to the huge increase in green house gas. Although there are some natural activities that can also influence the gas in atmosphere, the abnormal increase should be mainly attributed to human. So we collect the global mean mole fraction of four frequently analyzed green house gas, including CH$_4$, CO$_2$, N$_2$O, SF$_6$, to explore their relationships with current climate change.
+
+In the following plot, we show how the gas concentration of four green house gases varied monthly with time in the past years. The start time of each plot is based on the time National Oceanic and Atmospheric Administration (NOAA) started to record the global data of the gas.
+
+```{r fig.height = 7, fig.width = 10}
+gh_gas <- read.table("data/clean/gh_gas_monthly.csv", header = TRUE, sep = ",") %>% transform(time = as.yearmon(time))
+gh_gas_pivot <- gh_gas %>% pivot_longer(cols = !c(time, decimal), names_to = "gas", values_to = "value") %>% drop_na
+labels_gas <- c(`CH4`="CH4 (ppb)", `CO2`="CO2(ppm)", `N2O`="N2O (ppb)",`SF6`="SF6 (ppt)")
+gh_gas_pivot %>% ggplot(aes(x = time, y=value)) + geom_smooth(method = 'loess', formula = y~x, se = TRUE) +
+  geom_point(color = 'black', size = 0.5, alpha = 0.8) + facet_wrap(~gas, scales = "free", labeller = as_labeller(labels_gas)) + theme_grey(16) +
+  ggtitle("Mole Fraction of Greenhouse Gas") + xlab("Month") + ylab("Gas Concentration") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+```
+
+In addition to the periodical fluctuations, the trends for mole fraction of all four gases are increasing. Except that the curve for CH$_4$ has a platform from 2000 to 2007, other three curves show slightly faster growth than linear growth. For Further analysis, the plot below shows the growth rate of four gases. To eliminate the influence of periodical fluctuations on the understanding of the whole pattern of trend, we use the yearly data to display the changes.
+```{r fig.height = 7, fig.width = 10}
+gas_rate <- read.table("data/clean/gas_rate_yearly.csv", header = TRUE, sep = ",")
+gas_rate_pivot <- gas_rate %>% pivot_longer(cols = !year, names_to = "gas", values_to = "rate") %>% drop_na
+gas_rate_pivot %>% ggplot(aes(x = year, y=rate)) + 
+  geom_col(alpha = 0.6) + geom_line(color = "red", size = 0.5) + expand_limits(y = 0) +
+  facet_wrap(~gas, scales = "free") + theme_grey(16) +
+  ggtitle("Growth Rate of Greenhouse Gas Concentration") + xlab("Year") + ylab("Growth Rate") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+```
+
+Although from 1999 to 2006, the mole fraction of CH$_4$ displays a negative growth or a small growth rate, in other years from 1880s to now, its growth rate is much larger than other gases. The growth rates of other three gases are relatively small, but show a continuous increasing trend. Then we analyze the relationships between the gas concentration in the atmosphere and global temperature by drawing scatter plots and hexagonal heatmaps. Every point in scatter plots denotes mean temperature and mean mole fraction in one month from Jan 2001 to Aug 2021.The color indicates to the time in scatter plots while indicates to the density of data points in hexagonal heatmaps. 
+```{r fig.height = 7, fig.width = 10}
+temp_monthly <- read.table("data/clean/temp_monthly.csv", header = TRUE, sep = ",") %>% transform(time = as.yearmon(time))
+temp_gas_pivot = temp_monthly %>% inner_join(gh_gas_pivot, by = c("time" = "time")) %>% filter(time >= as.yearmon("Jan 2001")) %>% rename(Time = decimal)
+temp_gas_pivot %>% ggplot(aes(value, temp, color = Time)) + 
+  geom_point(alpha = 1, stroke = 0, size = 2) + 
+  geom_smooth(method = "lm", se=FALSE, color="red") + 
+  scale_fill_gradient() +
+  facet_wrap(~gas, scales = "free", labeller = as_labeller(labels_gas)) +
+  ggtitle("Gas Concentration vs Global Temperature") + xlab("Gas Concentration") + ylab("Temperature (C)") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+```
+```{r fig.height = 7, fig.width = 10}
+temp_gas_pivot %>% ggplot(aes(value, temp)) + 
+  geom_hex(bins = 20) + 
+  scale_fill_gradient(low = "#56B1F7", high = "#132B43") +
+  facet_wrap(~gas, scales = "free" , labeller = as_labeller(labels_gas)) + theme_grey(16) +
+  ggtitle("Gas Concentration vs Global Temperature") + xlab("Gas Concentration") + ylab("Temperature (C)") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+```
+
+In the scatter plots, we can observe obvious positive correlations between mole fraction and temperature for four gases. And in all four plots, the points with darker colors, which means earlier times, are more likely to gather at the left bottom corner, while the lighter blue points tend to gather at the right top corner. The scatter plots displays a pattern coinciding with the analysis above that the emissions of greenhouse gas are increasing as time goes by, and at the same time, the global temperature keeps an increasing trend. Then from the hexagonal heatmaps, we observe that the points at the left bottom corner have a higher density, while points in the center and at the right top corner of plots are relatively sparse. Considering that the time is uniformly distributed, it indicates that the growth rates for both gas and temperature are higher in more recent years. From the analysis above, we find that the greenhouse gas concentration and temperature have similar behaviors in recent years. So it is of high possibility that the accumulation of greenhouse gas in the atmosphere is one of the main reason for the global warming.
+
+

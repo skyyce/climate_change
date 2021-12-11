@@ -24,7 +24,7 @@
 <meta name="author" content="Yunchen Yao, Zhucheng Zhan, Yifan Jiang" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2021-12-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -75,7 +75,11 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#data-for-patterns-of-climate-change"><i class="fa fa-check"></i><b>3.1</b> Data for patterns of climate change</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#data-for-causes-of-climate-change"><i class="fa fa-check"></i><b>3.2</b> Data for causes of climate change</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#analysis"><i class="fa fa-check"></i><b>4.1</b> Analysis</a>
@@ -87,7 +91,14 @@
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#summary"><i class="fa fa-check"></i><b>4.2</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#main-causes-of-climate-change"><i class="fa fa-check"></i><b>5.1</b> Main causes of climate change</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#natural-causes"><i class="fa fa-check"></i><b>5.1.1</b> Natural causes</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#human-causes"><i class="fa fa-check"></i><b>5.1.2</b> Human causes</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -200,12 +211,12 @@
 ##  Please verify whether they are in fact logically distinct variables.
 ##      [,1]    [,2]     
 ## [1,] &quot;smoke&quot; &quot;alcohol&quot;</code></pre>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<p><img src="finalproj_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 From the plot above we can see some strong pattern correltion between varialbe ‘steak’ and the missingness of variable ‘steak_prep’. There is no description for the column ‘steak’, based on this corrlation, we inspect it as an indicator on whether the respondent is a steak eater or not.</p>
 </div>
 <div id="missing-partern-investigation" class="section level3" number="4.1.4">
 <h3><span class="header-section-number">4.1.4</span> Missing Partern Investigation</h3>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="1440" />
+<p><img src="finalproj_files/figure-html/unnamed-chunk-19-1.png" width="1440" />
 There are total 22 missing patterns found in the steak survey dataset.</p>
 <ol style="list-style-type: decimal">
 <li>We see that most of the observation is complete.</li>
@@ -281,6 +292,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

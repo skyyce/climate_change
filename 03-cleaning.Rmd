@@ -1,1 +1,78 @@
 # Data transformation
+
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(latex2exp)
+library(tidyverse)
+library(zoo)
+```
+## Data for patterns of climate change
+```{r}
+temp <- read.table("data/raw/GLB.Ts+dSST.csv", header = TRUE, skip = 1, sep = ",")
+temp_monthly <- temp %>% select(-J.D, -D.N, -DJF, -MAM, -JJA, -SON) %>% 
+  transform(Nov = as.double(Nov), Dec = as.double(Dec)) %>% 
+  pivot_longer(cols = !Year, names_to = "Month", values_to = "temp") %>% 
+  transform(time = as.yearmon(paste(Month, Year))) %>% 
+  select(time, temp)
+write.csv(temp_monthly, "data/clean/temp_monthly.csv", row.names = FALSE)
+```
+
+
+```{r}
+temp_yearly <- temp %>% select(Year, J.D) %>% 
+  transform(J.D = as.double(J.D)) %>% 
+  rename(temp = J.D)
+write.csv(temp_yearly, "data/clean/temp_yearly.csv", row.names = FALSE)
+```
+
+## Data for causes of climate change
+In this part, except the temperature data, we use the data about Earth's orbit and solar irradiation, and the data about greenhouse gas. For the Milankovitch orbital data, we choose to download the data from 2800s BC to now on the [website](https://biocycle.atmos.colostate.edu/shiny/Milankovitch/), and select the variables that is helpful for us to solve problems. The data of four greenhouse gases are separated, so we write functions to read mole fraction data and growth rate data, and combine the data of four gases into one table. For the convenience of following table combination and plotting, the time variables in the tables are transformed to the same format.
+
+
+```{r}
+read_greenHouseGas <- function(file){
+  GAS <- read.table(file, header = FALSE, comment.char = "#")
+  GAS <- GAS %>% select(V1, V2, V3, V4) %>% rename(year = V1, month = V2, decimal = V3, gas = V4)
+  GAS$time <- as.yearmon(paste(GAS$year, GAS$month), "%Y %m")
+  GAS <- GAS %>% select(time, decimal, gas)
+}
+```
+
+```{r}
+CO2 <- read_greenHouseGas("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_gl.txt")
+CO2 <- CO2 %>% rename(CO2 = gas)
+CH4 <- read_greenHouseGas("https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.txt")
+CH4 <- CH4 %>% rename(CH4 = gas)
+N2O <- read_greenHouseGas("https://gml.noaa.gov/webdata/ccgg/trends/n2o/n2o_mm_gl.txt")
+N2O <- N2O %>% rename(N2O = gas)
+SF6 <- read_greenHouseGas("https://gml.noaa.gov/webdata/ccgg/trends/sf6/sf6_mm_gl.txt")
+SF6 <- SF6 %>% rename(SF6 = gas)
+```
+
+```{r}
+gh_gas <- CO2 %>% full_join(CH4, by = c("time" = "time", "decimal" = "decimal")) %>% full_join(N2O, by = c("time" = "time", "decimal" = "decimal")) %>% full_join(SF6, by = c("time" = "time", "decimal" = "decimal")) 
+write.csv(gh_gas, "data/clean/gh_gas_monthly.csv", row.names = FALSE)
+```
+
+```{r}
+read_gasGrowthRate <- function(file){
+  GAS <- read.table(file, header = FALSE, comment.char = "#")
+  GAS <- GAS %>% select(V1, V2) %>% rename(year = V1, rate = V2)
+}
+```
+
+```{r}
+CO2_rate = read_gasGrowthRate("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_gr_gl.txt") %>% rename(CO2 = rate)
+CH4_rate = read_gasGrowthRate("https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_gr_gl.txt") %>% rename(CH4 = rate)
+N2O_rate = read_gasGrowthRate("https://gml.noaa.gov/webdata/ccgg/trends/n2o/n2o_gr_gl.txt") %>% rename(N2O = rate)
+SF6_rate = read_gasGrowthRate("https://gml.noaa.gov/webdata/ccgg/trends/sf6/sf6_gr_gl.txt") %>% rename(SF6 = rate)
+```
+
+
+```{r}
+gas_rate <- CO2_rate %>% full_join(CH4_rate, by = c("year" = "year")) %>% full_join(N2O_rate, by = c("year" = "year")) %>% full_join(SF6_rate, by = c("year" = "year")) %>% filter(year >= 1980)
+write.csv(gas_rate, "data/clean/gas_rate_yearly.csv", row.names = FALSE)
+```
+

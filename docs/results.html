@@ -24,7 +24,7 @@
 <meta name="author" content="Yunchen Yao, Zhucheng Zhan, Yifan Jiang" />
 
 
-<meta name="date" content="2021-11-18" />
+<meta name="date" content="2021-12-11" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -75,7 +75,11 @@
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
-<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
+<li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#data-for-patterns-of-climate-change"><i class="fa fa-check"></i><b>3.1</b> Data for patterns of climate change</a></li>
+<li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#data-for-causes-of-climate-change"><i class="fa fa-check"></i><b>3.2</b> Data for causes of climate change</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#analysis"><i class="fa fa-check"></i><b>4.1</b> Analysis</a>
@@ -87,7 +91,14 @@
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="missing-values.html"><a href="missing-values.html#summary"><i class="fa fa-check"></i><b>4.2</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#main-causes-of-climate-change"><i class="fa fa-check"></i><b>5.1</b> Main causes of climate change</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#natural-causes"><i class="fa fa-check"></i><b>5.1.1</b> Natural causes</a></li>
+<li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#human-causes"><i class="fa fa-check"></i><b>5.1.2</b> Human causes</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -111,7 +122,35 @@
             <section class="normal" id="section-">
 <div id="results" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
+<div id="main-causes-of-climate-change" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Main causes of climate change</h2>
+<p>In the past more than a hundred years, the global land-ocean temperature kept increasing. So we plan to figure out what leads to the current warming trend. In the following discussion, we explore the effects of natural factors and human activities on temperature.</p>
+<div id="natural-causes" class="section level3" number="5.1.1">
+<h3><span class="header-section-number">5.1.1</span> Natural causes</h3>
+<p>Changes of the Earth’s orbit around the sun and the tilt of the Earth’s axis define the sequence of glaciation periods and warm periods, and influence the climate on Earth by changing the energy the Earth could receive from the sun. Thus the metrics of Earth’s orbit and the solar irradiation are taken into account for the natural causes of climate change. In 1930s, Milutin Milankovitch introduced the concept of Milankovich cycles to describe the changes of Earth’s orbit, which includes eccentricity to describe the shape of Earth’s orbit, obliquity and precession to describe the Earth’s axis. Eccentricity = (aphelion-perihelion)/(aphelion+perihelion). Obliquity is the angle Earth’s axis of rotation is tilted as it travels around the Sun. And insolation, which denotes the daily mean solar irradiation at the top of Earth’s atmosphere, is introduced to show the irradiation the Earth receives from the sun. The following shows the changes of eccentricity, obliquity and insolation in the past around five thousand years from 2800s BC to now.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-22-1.png" width="960" /></p>
+<p>In the past five thousand year period, all three metrics fluctuates periodically and there is no obviously abnormal curve appears in the recent 200 years, when the global warming occurred, compared to the curve before. It seems that the value of eccentricity increases over a long time span, it is more reasonable to regard it as a normal fluctuation in a long period rather than a sudden change in short term, considering the eccentricity of Earth has a period of about a hundred thousand year.</p>
+<p>Then we focus more on the recent 200 years.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-23-1.png" width="960" /></p>
+<p>In the short term, both obliquity and isolation have relatively smooth cycle changes while eccentricity has a declining trend.</p>
+<p>To have a better insight of the relationship between these natural causes and temperature, we use the data from 1880 to draw the scatter plots and make linear fitting. In the plot, the color of points denotes the corresponding year.
+<img src="finalproj_files/figure-html/unnamed-chunk-24-1.png" width="960" /></p>
+<p>From the plot between eccentricity and temperature, we could observe that there is a negative correlations between eccentricity and temperature. The points that gather at the bottom right corner are dark blue, which means in the early time, the temperature is lower while the value of eccentricity is larger, coinciding with the time series plots above. And for points in light blue, they are more likely to gather at top and middle of the left side. It shows that during the nearest time, the value of eccentricity is smaller than the previous but has a relatively stable value, while the temperature still keeps going up. So it seems that the change of Earth’s orbit has influenced the temperature to some degree, but it is not the main reason for the continuous warmer weather, at least in the recent 50 years when the value of eccentricity does not change a lot. And we also need to notice that in the other two scatter plots that show relationships of temperature with obliquity and insolation, there is no obvious linear correlations between two variables, indicating that changes of the tilt of Earth’s axis and the amount of solar irradiation does not play an important role in warming trend. As mentioned above, the change of Earth’s orbit influences climate change by changing the solar irradiation. Although the eccentricity has an obvious change, the irradiation received by Earth keeps fluctuating between a stable value in the recent 200 years, which could be explained by the claim that there are other factors that offset the effect of Earth’s orbit. Based on the analysis above, we could hardly draw to the conclusion that there are strong causal relationship between natural factors and global warming.</p>
+</div>
+<div id="human-causes" class="section level3" number="5.1.2">
+<h3><span class="header-section-number">5.1.2</span> Human causes</h3>
+<p>The accumulation of greenhouse gas in the atmosphere will make the heat trapped on the surface of Earth, thus lead to the temperature increase on Earth. Since the Industrial Revolution, deforestation, fossil fuel use and other human activities have led to the huge increase in green house gas. Although there are some natural activities that can also influence the gas in atmosphere, the abnormal increase should be mainly attributed to human. So we collect the global mean mole fraction of four frequently analyzed green house gas, including CH<span class="math inline">\(_4\)</span>, CO<span class="math inline">\(_2\)</span>, N<span class="math inline">\(_2\)</span>O, SF<span class="math inline">\(_6\)</span>, to explore their relationships with current climate change.</p>
+<p>In the following plot, we show how the gas concentration of four green house gases varied monthly with time in the past years. The start time of each plot is based on the time National Oceanic and Atmospheric Administration (NOAA) started to record the global data of the gas.</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-25-1.png" width="960" /></p>
+<p>In addition to the periodical fluctuations, the trends for mole fraction of all four gases are increasing. Except that the curve for CH<span class="math inline">\(_4\)</span> has a platform from 2000 to 2007, other three curves show slightly faster growth than linear growth. For Further analysis, the plot below shows the growth rate of four gases. To eliminate the influence of periodical fluctuations on the understanding of the whole pattern of trend, we use the yearly data to display the changes.
+<img src="finalproj_files/figure-html/unnamed-chunk-26-1.png" width="960" /></p>
+<p>Although from 1999 to 2006, the mole fraction of CH<span class="math inline">\(_4\)</span> displays a negative growth or a small growth rate, in other years from 1880s to now, its growth rate is much larger than other gases. The growth rates of other three gases are relatively small, but show a continuous increasing trend. Then we analyze the relationships between the gas concentration in the atmosphere and global temperature by drawing scatter plots and hexagonal heatmaps. Every point in scatter plots denotes mean temperature and mean mole fraction in one month from Jan 2001 to Aug 2021.The color indicates to the time in scatter plots while indicates to the density of data points in hexagonal heatmaps.
+<img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="960" />
+<img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="960" /></p>
+<p>In the scatter plots, we can observe obvious positive correlations between mole fraction and temperature for four gases. And in all four plots, the points with darker colors, which means earlier times, are more likely to gather at the left bottom corner, while the lighter blue points tend to gather at the right top corner. The scatter plots displays a pattern coinciding with the analysis above that the emissions of greenhouse gas are increasing as time goes by, and at the same time, the global temperature keeps an increasing trend. Then from the hexagonal heatmaps, we observe that the points at the left bottom corner have a higher density, while points in the center and at the right top corner of plots are relatively sparse. Considering that the time is uniformly distributed, it indicates that the growth rates for both gas and temperature are higher in more recent years. From the analysis above, we find that the greenhouse gas concentration and temperature have similar behaviors in recent years. So it is of high possibility that the accumulation of greenhouse gas in the atmosphere is one of the main reason for the global warming.</p>
 
+</div>
+</div>
 </div>
             </section>
 
@@ -173,6 +212,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
