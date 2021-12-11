@@ -77,7 +77,7 @@ In addition to the periodical fluctuations, the trends for mole fraction of all 
 gas_rate <- read.table("data/clean/gas_rate_yearly.csv", header = TRUE, sep = ",")
 gas_rate_pivot <- gas_rate %>% pivot_longer(cols = !year, names_to = "gas", values_to = "rate") %>% drop_na
 gas_rate_pivot %>% ggplot(aes(x = year, y=rate)) + 
-  geom_col(alpha = 0.6) + geom_line(color = "red", size = 0.5) + expand_limits(y = 0) +
+  geom_col(alpha = 0.8) + expand_limits(y = 0) +
   facet_wrap(~gas, scales = "free") + theme_grey(16) +
   ggtitle("Growth Rate of Greenhouse Gas Concentration") + xlab("Year") + ylab("Growth Rate") +
   theme(plot.title = element_text(size = 15, face = "bold"))
