@@ -76,3 +76,48 @@ gas_rate <- CO2_rate %>% full_join(CH4_rate, by = c("year" = "year")) %>% full_j
 write.csv(gas_rate, "data/clean/gas_rate_yearly.csv", row.names = FALSE)
 ```
 
+## Data for effects of climate change
+In this part, we use 3 data set from NASA_EARTH_DATA. These three data sets are about ice sheet mass in Antarctic, ice sheet mass in Greenland and Global sea level change. These data sets are in txt. files, so we just simply read the table. You can view these data on [website1](https://podaac-tools.jpl.nasa.gov/drive/files/allData/tellus/L4/ice_mass/RL06/v02/mascon_CRI//antarctica_mass_200204_202109.txt)
+[website2](https://podaac-tools.jpl.nasa.gov/drive/files/allData/merged_alt/L2/TP_J1_OSTM/global_mean_sea_level//GMSL_TPJAOS_5.1_199209_202108.txt)
+[website3](http://podaac.jpl.nasa.gov/dataset/MERGED_TP_J1_OSTM_OST_ALL_V51)
+
+```{r}
+df <- read.table("data/clean/ice_sheet_antarctica_mass_200204_202109.txt",
+                 skip=31,
+                 col.names = c('TIME', 'antarctica', 'antarctica_sigma'))
+```
+
+```{r}
+dt <- read.table("data/clean/ice_sheet_greenland_mass_200204_202109.txt",
+                 skip=31,
+                 col.names = c('TIME', 'greenland', 'greenland_sigma'))
+```
+
+```{r}
+tt <- read.table("data/clean/sea_level_GMSL_TPJAOS_5.1_199209_202108.txt", skip = 48)
+head(tt)
+```
+Another data set we use is from NOAA database. You can view these data on [website4](https://www.climate.gov/maps-data/dataset/severe-storms-and-extreme-events-data-table) Since every year's data is gathered in one csv. file and we wants to use data from 2000 to 2021, we download the 22 csv. files into one folder and then try to compile all the data into one csv. file.
+```{r}
+library(readr)
+library(data.table)
+library(tidyverse)
+
+dir = "data/clean/stormevents_2000_2021"  # Search the file under some specific directory 
+#get the csv file list
+file_list = list.files(path = dir, pattern = "*.csv$",recursive = TRUE,full.names = TRUE)    
+#form a new place to save the csv file
+store_csv = "data/clean/stormevents_2000_2021_new.csv" #paste(dir,"new.csv")       
+
+for(i in 1:length(file_list))     #loop
+{
+    df = fread(file = file_list[i],encoding = 'UTF-8')         #read the csv files
+    #if not exist, then write a new csv file
+    write_csv(df,path = store_csv,append = TRUE, col_names = FALSE)              
+    
+}
+
+stormevents_2000_2021_new <- read_csv("data/clean/stormevents_2000_2021_new.csv")
+
+
+```

@@ -3,6 +3,7 @@ data-sources
 data-transformation
 data-for-patterns-of-climate-change
 data-for-causes-of-climate-change
+data-for-effects-of-climate-change
 missing-values
 analysis
 missing-counts-by-column
@@ -14,5 +15,9 @@ results
 main-causes-of-climate-change
 natural-causes
 human-causes
+main-effects-of-climate-change
+ice-sheets-losing-mass
+global-sea-level-rising
+severe-storms-and-extreme-events
 interactive-component
 conclusion

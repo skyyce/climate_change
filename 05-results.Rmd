@@ -106,4 +106,108 @@ temp_gas_pivot %>% ggplot(aes(value, temp)) +
 
 In the scatter plots, we can observe obvious positive correlations between mole fraction and temperature for four gases. And in all four plots, the points with darker colors, which means earlier times, are more likely to gather at the left bottom corner, while the lighter blue points tend to gather at the right top corner. The scatter plots displays a pattern coinciding with the analysis above that the emissions of greenhouse gas are increasing as time goes by, and at the same time, the global temperature keeps an increasing trend. Then from the hexagonal heatmaps, we observe that the points at the left bottom corner have a higher density, while points in the center and at the right top corner of plots are relatively sparse. Considering that the time is uniformly distributed, it indicates that the growth rates for both gas and temperature are higher in more recent years. From the analysis above, we find that the greenhouse gas concentration and temperature have similar behaviors in recent years. So it is of high possibility that the accumulation of greenhouse gas in the atmosphere is one of the main reason for the global warming.
 
+## Main effects of climate change
+
+In this part, we want to show the impacts of global warming to warn people to pay attention to climate changes. Rising temperatures have led to the gradual melting of a large number of glaciers, causing sea levels to rise and threatening coastal areas. The knock-on effects are: larger water areas --> more evaporation --> longer rainy seasons --> more flooding. Some scholars believe that global warming will lead to more extreme weather such as droughts and typhoons.
+
+### ice sheets losing mass
+
+The Antarctic and Arctic are key and sensitive areas for global climate change. And the Greenland and Antarctic ice sheets are the largest ice bodies in the world. So the evolution of these two ice sheets plays an important role in the global climate system. When the north and south poles are warming at a rate much higher than the global average, what pattern can we discover?
+
+The melting Antarctic ice sheet and Greenland ice sheet:
+
+The Antarctic ice sheet is formed by the pressing of snow on the Antarctic continent over millions of years. It covers an area of about 14 million square kilometers and has an average thickness of 2,160 meters. It accounts for about 70% of the world's total freshwater reserves.
+Greenland is covered with dense snow and ice over the years, and is often referred to as the "last ice zone" of the Arctic Ocean. In the summer of 2020, sea ice has become thinner due to long-term climate change, and strong summer winds have blown away the sea ice. A vast sea surface has appeared here. Scientists have found that under the background of global warming, thinning sea ice is more vulnerable under abnormal climatic conditions. For all kinds of life in ecologically fragile areas, climate change may really mean the demise of their homes.
+
+```{r}
+library(gridExtra)
+df <- read.table("data/clean/ice_sheet_antarctica_mass_200204_202109.txt",
+                 skip=31,
+                 col.names = c('TIME', 'antarctica', 'antarctica_sigma'))
+
+df$antarctica_sigma <- df$antarctica_sigma+df$antarctica
+df$mass_antarctic <-df$antarctica
+
+p1 <- df %>% ggplot() + 
+    geom_point(aes(x=TIME, mass_antarctic), color = 2) + 
+    stat_smooth(aes(x=TIME, mass_antarctic), method = 'loess')+
+    ggtitle("mass of the ice sheet over time (Antarctic)")
+
+dt <- read.table("data/clean/ice_sheet_greenland_mass_200204_202109.txt",
+                 skip=31,
+                 col.names = c('TIME', 'greenland', 'greenland_sigma'))
+
+dt$greenland_sigma <- dt$greenland_sigma+dt$greenland
+dt$mass_greenland <-dt$greenland
+
+p2 <- dt %>% ggplot() + 
+    geom_point(aes(x=TIME, mass_greenland), color = 2) + 
+    stat_smooth(aes(x=TIME, mass_greenland), method = 'loess')+ 
+    ggtitle("mass of the ice sheet over time (Greenland)")
+
+grid.arrange(p1,p2,ncol=1)
+```
+From the two graphs above, we can clearly see that the mass of the ice sheets in Antarctic and Greenland is negatively correlated with time. Since 2002, the quality of these two ice sheets has been losing more and more rapidly.
+From 2002 to 2021, the cumulative ice loss in Antarctica was 2693.60 Gigatonnes; the corresponding number on Greenland Island was 5144.58 Gigatonnes.
+
+The graphss shows that since the 21st century, the Greenland and Antarctic ice sheets have lost a large amount of ice at a rapid growth rate. Compared with the first 10 years of 2002-2011, the large-scale loss of the Greenland ice sheet in 2012-2021 has doubled, and the Antarctic ice sheet has more than tripled.
+
+The msss of the Greenland Ice Sheet increased in 2002, but since 2003, the mass start to decrease and the rate of mass losing has been increasing. This is the same for the Antarctic ice sheet, it was still growing in 2002, and since then it has been losing mass every year. This is mainly due to the thinning of the glaciers at the main outlet of the western Antarctic ice sheet and the loss of mass of the Antarctic Peninsula ice sheet. The floating ice sheet has also become thinner.
+
+### global sea level rising
+
+In the previous section, we discussed the melting of ice sheets due to rising temperatures in recent years. This will further increase the sea level, an impact that we cannot ignore. Of course, there are many factors that cause the sea level to rise, not only because of the melting of ice sheets, but also because the upper seawater heats up and the volume of the ocean is expands, and so on.
+
+Why do we explore the sea level pattern? i.e Why sea level matters?
+
+Sea level rise is a slow-onset natural disaster to human survival and economic development. Since it is slow onset, it is often ignored by people, thinking that a few millimeters of increase per year is not a danger. In fact, this kind of disaster is cumulative and gradual. Coupled with the impact of land subsidence in many coastal areas, sea level rise may reach 1 meter or more in a century. This is undoubtedly a disaster for people in many places. And just now, it has brought harm to residents in coastal areas. It makes the occurrence of catastrophic storm surges in coastal areas more frequent, floods intensify, coasts are receded, coastal lowlands are eroded, water in coastal areas is polluted, farmland is salinized, tidal range increases, wave action is strengthened, and coastal areas are weakened. The requirement of building stronger dams will force designers to improve engineering design standards and increase project funding. It will also aggravate the intrusion of seawater in the estuary, increase the difficulty of sewage discharge, and destroy the ecological balance.
+
+```{r}
+tt <- read.table("data/clean/sea_level_GMSL_TPJAOS_5.1_199209_202108.txt", skip = 48)
+head(tt)
+
+
+tt %>% ggplot(mapping = aes(x = V3, y = V6, group = 1)) + 
+  geom_line(color=4) + xlab('Year') +
+  labs(x = "Time", y = "Global sea level ", title = "Global sea level change over time") 
+
+```
+
+Using data from NASA Goddard Space Flight Center, we drew the graph above. We can see that the sea level is roughly positively correlated with time. From 1993 to 2021, the sea level has risen by 95.87mm.
+The rate of sea level rise is accelerating: From 1993 to 2010, the rate of sea level rise was about 2.5mm per year. However, from 2011 to 2021, the rate of sea level rise was about 4.3mm per year. This almost doubled.
+Moreover, it is worth noting that from the graph, we can see that the sea level actually rises with fluctuations. In the short term, sometimes it has a temporary downward trend. This seems to contradict our argument. However, in fact, we have explained in the previous part that there are many reasons for sea level changes, sometimes not only because of climate changes, but also may be affected by human actions. For example, one of the possible factors that caused the sea level to fall in the graph is global dam projects.
+
+### Severe storms and extreme events
+
+As we already known from the previous part, climate changes lead to ice sheets mass loss, then induce the rising of global sea level, which contribute to flooding in coastal areas. However, it seems that this is only one of the extreme events that could be triggered by climate change. 
+This year, the United Nations issued a survey report saying that today’s extreme weather outbreaks are related to the earth’s climate change, especially global warming. Anyone who has studied geography knows that a relatively stable climate zone and wind belt has formed on the earth due to the influence of factors such as latitude, the deflection of the earth, and uneven heating of the earth’s surface. The density of high-pressure air masses tends to flow toward low-pressure air masses, while the specific heat of ocean water is lower than that of land rocks. It is easier to form air masses with higher pressure over the ocean. Coupled with the influence of the deflection force of the earth, the earth has formed: polar east wind and prevailing west wind (Westerly zone), northeast monsoon, and southeast monsoon. These wind belts happen to be able to carry a large amount of water vapor from the ocean to the land. The west wind belt has more precipitation throughout the year, and the northeast, southeast monsoon belt is mainly rainy and hot in the same period. However, global warming has risen by more than 1°C compared with the last century, with the melting of extremely low glaciers and rising sea levels. However, this impact is still relatively limited. The biggest impact is the further warming of the earth, and the uneven heating between the earth's land, ocean and atmosphere will become more serious, which may cause the original climate zone and wind belt to shift. Previously, the extreme high temperature in North America was the effect of the subtropical high pressure. In the high-pressure air mass, the atmospheric subsidence caused the lack of precipitation, the lack of internal flow, and the difficulty of the external air mass to intrude. The continuous sunny days caused the ground to heat the atmosphere, which in turn made the atmosphere hotter. Both El Niño and La Niña are caused by uneven heating of the earth and abnormal temperature in local areas.
+
+```{r}
+library(readr)
+library(data.table)
+library(tidyverse)
+
+dir = "data/clean/stormevents_2000_2021"
+file_list = list.files(path = dir, pattern = "*.csv$",recursive = TRUE,full.names = TRUE)  
+store_csv = "data/clean/stormevents_2000_2021_new.csv" #paste(dir,"new.csv")      
+
+for(i in 1:length(file_list))     
+{
+    df = fread(file = file_list[i],encoding = 'UTF-8')        
+
+    write_csv(df,path = store_csv,append = TRUE, col_names = FALSE)              
+    
+}
+
+stormevents_2000_2021_new <- read_csv("data/clean/stormevents_2000_2021_new.csv")
+colnames(stormevents_2000_2021_new)
+
+tmp <- stormevents_2000_2021_new %>% group_by(`2000`) %>% count() 
+tmp %>% ggplot() + geom_bar(aes(x=as.factor(`2000`), y= n, fill=as.factor(`2000`)), stat = 'identity') + 
+  coord_flip() + labs(x="Time")
+
+```
+  
+Observers from the National Weather Service kept a comprehensive record describing 48 different types of serious events, from localized thunderstorms, tornadoes and flash floods to regional events such as hurricanes, snowstorms and winter storms. We have counted the number of natural disasters in the United States each year from 2000 to 2021. What puzzles us is that statistics have found that the number of natural disasters does not have a clear upward trend, but rather fluctuates. Among them, the number in 2011 was the largest, almost 1.5 times that of other years. Although the number of disasters in 2021 is the least, it is not of high reference value, because 2021 has not yet ended and the data for this year is incomplete. Generally speaking, although the number of natural disasters is slowly increasing, they are very unstable and there is no obvious pattern. This leaves us room to think, does climate change really have a great impact on extreme weather?
+
 

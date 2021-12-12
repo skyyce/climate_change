@@ -24,7 +24,7 @@
 <meta name="author" content="Yunchen Yao, Zhucheng Zhan, Yifan Jiang" />
 
 
-<meta name="date" content="2021-12-11" />
+<meta name="date" content="2021-12-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -79,6 +79,7 @@
 <ul>
 <li class="chapter" data-level="3.1" data-path="data-transformation.html"><a href="data-transformation.html#data-for-patterns-of-climate-change"><i class="fa fa-check"></i><b>3.1</b> Data for patterns of climate change</a></li>
 <li class="chapter" data-level="3.2" data-path="data-transformation.html"><a href="data-transformation.html#data-for-causes-of-climate-change"><i class="fa fa-check"></i><b>3.2</b> Data for causes of climate change</a></li>
+<li class="chapter" data-level="3.3" data-path="data-transformation.html"><a href="data-transformation.html#data-for-effects-of-climate-change"><i class="fa fa-check"></i><b>3.3</b> Data for effects of climate change</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -97,6 +98,12 @@
 <ul>
 <li class="chapter" data-level="5.1.1" data-path="results.html"><a href="results.html#natural-causes"><i class="fa fa-check"></i><b>5.1.1</b> Natural causes</a></li>
 <li class="chapter" data-level="5.1.2" data-path="results.html"><a href="results.html#human-causes"><i class="fa fa-check"></i><b>5.1.2</b> Human causes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#main-effects-of-climate-change"><i class="fa fa-check"></i><b>5.2</b> Main effects of climate change</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="results.html"><a href="results.html#ice-sheets-losing-mass"><i class="fa fa-check"></i><b>5.2.1</b> ice sheets losing mass</a></li>
+<li class="chapter" data-level="5.2.2" data-path="results.html"><a href="results.html#global-sea-level-rising"><i class="fa fa-check"></i><b>5.2.2</b> global sea level rising</a></li>
+<li class="chapter" data-level="5.2.3" data-path="results.html"><a href="results.html#severe-storms-and-extreme-events"><i class="fa fa-check"></i><b>5.2.3</b> Severe storms and extreme events</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -128,6 +135,20 @@
 <div id="data-for-causes-of-climate-change" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Data for causes of climate change</h2>
 <p>In this part, except the temperature data, we use the data about Earth’s orbit and solar irradiation, and the data about greenhouse gas. For the Milankovitch orbital data, we choose to download the data from 2800s BC to now on the <a href="https://biocycle.atmos.colostate.edu/shiny/Milankovitch/">website</a>, and select the variables that is helpful for us to solve problems. The data of four greenhouse gases are separated, so we write functions to read mole fraction data and growth rate data, and combine the data of four gases into one table. For the convenience of following table combination and plotting, the time variables in the tables are transformed to the same format.</p>
+</div>
+<div id="data-for-effects-of-climate-change" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Data for effects of climate change</h2>
+<p>In this part, we use 3 data set from NASA_EARTH_DATA. These three data sets are about ice sheet mass in Antarctic, ice sheet mass in Greenland and Global sea level change. These data sets are in txt. files, so we just simply read the table. You can view these data on <a href="https://podaac-tools.jpl.nasa.gov/drive/files/allData/tellus/L4/ice_mass/RL06/v02/mascon_CRI//antarctica_mass_200204_202109.txt">website1</a>
+<a href="https://podaac-tools.jpl.nasa.gov/drive/files/allData/merged_alt/L2/TP_J1_OSTM/global_mean_sea_level//GMSL_TPJAOS_5.1_199209_202108.txt">website2</a>
+<a href="http://podaac.jpl.nasa.gov/dataset/MERGED_TP_J1_OSTM_OST_ALL_V51">website3</a></p>
+<pre><code>##   V1 V2       V3     V4       V5     V6    V7     V8     V9   V10    V11    V12
+## 1  0 11 1993.012 452600 327401.3 -38.61 89.88 -38.78 -38.61 89.88 -38.78 -38.56
+## 2  0 12 1993.039 447591 324498.4 -42.01 90.93 -39.80 -42.00 90.93 -39.80 -39.09
+## 3  0 13 1993.066 459462 333018.2 -41.97 87.31 -39.65 -41.96 87.31 -39.64 -38.56
+## 4  0 14 1993.093 410064 297483.2 -42.71 90.79 -39.69 -42.69 90.79 -39.67 -38.32
+## 5  0 15 1993.120 446813 321635.8 -37.88 90.29 -38.78 -37.85 90.29 -38.75 -37.20
+## 6  0 16 1993.147 405085 291945.9 -36.10 89.99 -37.73 -36.07 89.99 -37.70 -35.98</code></pre>
+<p>Another data set we use is from NOAA database. You can view these data on <a href="https://www.climate.gov/maps-data/dataset/severe-storms-and-extreme-events-data-table">website4</a> Since every year’s data is gathered in one csv. file and we wants to use data from 2000 to 2021, we download the 22 csv. files into one folder and then try to compile all the data into one csv. file.</p>
 
 </div>
 </div>
