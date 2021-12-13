@@ -3,12 +3,17 @@
 
 ```{r}
 library(ggplot2)
+library(raster)
+library(ncdf4)
 library(dplyr)
 library(latex2exp)
 library(tidyverse)
 library(zoo)
 ```
+
 ## Data for patterns of climate change
+
+For the data that illustrate the patterns of climate change, we mainly preprocess the data by aggregate the data to month and up to year level so that we can have a clearer view of the pattern over the past two centuries. For the [HadCRUT](https://crudata.uea.ac.uk/cru/data/temperature) data, We mask out the months with zero coverage to keep the format consistent. We also filter out the data at year level, as we only use this dataset to investigate climate pattern at monthly level. We aggregate the [GISTEMP v4](https://data.giss.nasa.gov/gistemp/) data to yearly level to support analysis on the **cause** part. Finally, we preprocess the [NACR](https://climatedataguide.ucar.edu/climate-data/terraclimate-global-high-resolution-gridded-temperature-precipitation-and-other-water) data to the **Raster** or "gridded" data formatted in pixels to represent an area on the Earth's surface.
 ```{r}
 temp <- read.table("data/raw/GLB.Ts+dSST.csv", header = TRUE, skip = 1, sep = ",")
 temp_monthly <- temp %>% select(-J.D, -D.N, -DJF, -MAM, -JJA, -SON) %>% 
@@ -26,6 +31,69 @@ temp_yearly <- temp %>% select(Year, J.D) %>%
   rename(temp = J.D)
 write.csv(temp_yearly, "data/clean/temp_yearly.csv", row.names = FALSE)
 ```
+
+```{r}
+read_cru_hemi <- function(filename) {
+  # read in whole file as table
+  tab <- read.table(filename,fill=TRUE)
+  nrows <- nrow(tab)
+  # create frame
+  hemi <- data.frame(
+    year=tab[seq(1,nrows,2),1],
+    annual=tab[seq(1,nrows,2),14],
+    month=array(tab[seq(1,nrows,2),2:13]),
+    cover=array(tab[seq(2,nrows,2),2:13])
+  )
+  # mask out months with 0 coverage
+  hemi$month.1 [which(hemi$cover.1 ==0)] <- NA
+  hemi$month.2 [which(hemi$cover.2 ==0)] <- NA
+  hemi$month.3 [which(hemi$cover.3 ==0)] <- NA
+  hemi$month.4 [which(hemi$cover.4 ==0)] <- NA
+  hemi$month.5 [which(hemi$cover.5 ==0)] <- NA
+  hemi$month.6 [which(hemi$cover.6 ==0)] <- NA
+  hemi$month.7 [which(hemi$cover.7 ==0)] <- NA
+  hemi$month.8 [which(hemi$cover.8 ==0)] <- NA
+  hemi$month.9 [which(hemi$cover.9 ==0)] <- NA
+  hemi$month.10[which(hemi$cover.10==0)] <- NA
+  hemi$month.11[which(hemi$cover.11==0)] <- NA
+  hemi$month.12[which(hemi$cover.12==0)] <- NA
+  #
+  return(hemi)
+}
+
+temp_dat <- read_cru_hemi("data/raw/HadCRUT4-gl.dat")
+
+#remove cover
+temp_dat_monthly <- temp_dat %>%
+  select(-starts_with("cover")) %>%
+  select(-starts_with("annual")) %>%
+  gather(month, anomaly, -year) %>%
+  mutate(month = gsub("month\\.", "", month)) %>%
+  mutate(month = as.numeric(month)) %>%
+  filter(year !=2016)
+
+write.csv(temp_dat_monthly, 'data/clean/temp_dat_monthly.csv', row.names = FALSE)
+```
+
+
+```{r}
+read_nc_to_raster <- function(filename, idx, output){
+  nc_data = nc_open(filename)
+  temp = ncvar_get(nc_data, 'tmax')
+  lon = ncvar_get(nc_data, 'lon')
+  lat = ncvar_get(nc_data, 'lat')
+  
+  year = temp[,,idx]
+  year=year[order(nrow(year):1),]
+  world_map = raster(t(year), xmn=min(lon), xmx = max(lon), ymn = min(lat), ymx = max(lat))
+  writeRaster(world_map, output, overwrite=TRUE)
+}
+
+read_nc_to_raster('data/raw/TerraClimate_tmax_1960.nc', 1, 'data/clean/1960_tmax')
+read_nc_to_raster('data/raw/TerraClimate_tmax_1990.nc', 2, 'data/clean/1990_tmax')
+read_nc_to_raster('data/raw/TerraClimate_tmax_2020.nc', 3, 'data/clean/2020_tmax')
+```
+
 
 ## Data for causes of climate change
 In this part, except the temperature data, we use the data about Earth's orbit and solar irradiation, and the data about greenhouse gas. For the Milankovitch orbital data, we choose to download the data from 2800s BC to now on the [website](https://biocycle.atmos.colostate.edu/shiny/Milankovitch/), and select the variables that is helpful for us to solve problems. The data of four greenhouse gases are separated, so we write functions to read mole fraction data and growth rate data, and combine the data of four gases into one table. For the convenience of following table combination and plotting, the time variables in the tables are transformed to the same format.
@@ -77,9 +145,7 @@ write.csv(gas_rate, "data/clean/gas_rate_yearly.csv", row.names = FALSE)
 ```
 
 ## Data for effects of climate change
-In this part, we use 3 data set from NASA_EARTH_DATA. These three data sets are about ice sheet mass in Antarctic, ice sheet mass in Greenland and Global sea level change. These data sets are in txt. files, so we just simply read the table. You can view these data on [website1](https://podaac-tools.jpl.nasa.gov/drive/files/allData/tellus/L4/ice_mass/RL06/v02/mascon_CRI//antarctica_mass_200204_202109.txt)
-[website2](https://podaac-tools.jpl.nasa.gov/drive/files/allData/merged_alt/L2/TP_J1_OSTM/global_mean_sea_level//GMSL_TPJAOS_5.1_199209_202108.txt)
-[website3](http://podaac.jpl.nasa.gov/dataset/MERGED_TP_J1_OSTM_OST_ALL_V51)
+In this part, the data sets about ice sheet mass in Antarctic, ice sheet mass in Greenland and Global sea level change are in txt. files, so we just simply read the table.
 
 ```{r}
 df <- read.table("data/clean/ice_sheet_antarctica_mass_200204_202109.txt",
@@ -97,7 +163,7 @@ dt <- read.table("data/clean/ice_sheet_greenland_mass_200204_202109.txt",
 tt <- read.table("data/clean/sea_level_GMSL_TPJAOS_5.1_199209_202108.txt", skip = 48)
 head(tt)
 ```
-Another data set we use is from NOAA database. You can view these data on [website4](https://www.climate.gov/maps-data/dataset/severe-storms-and-extreme-events-data-table) Since every year's data is gathered in one csv. file and we wants to use data from 2000 to 2021, we download the 22 csv. files into one folder and then try to compile all the data into one csv. file.
+Another data set about the extreme events we use is from NOAA database. Since every year's data is gathered in one csv. file and we wants to use data from 2000 to 2021, we download the 22 csv. files into one folder and then try to compile all the data into one csv. file.
 ```{r}
 library(readr)
 library(data.table)

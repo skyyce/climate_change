@@ -5,23 +5,109 @@ library(dplyr)
 library(latex2exp)
 library(tidyverse)
 library(zoo)
+library(ncdf4)
+library(animation)
+library(viridis)
+library(scales)
+library(ggthemes)
+library(raster)
+library(reshape)
+library(reshape2)
 ```
+## Main pattern of climate change 
+
+
+The first part aims to illustrate the main pattern of the Earth's surface temperature for the past two to three centuries. The global warming is definitely an important topic when it comes to the area of climate change. We first take a look at the global land-ocean temperature index since 1880. The temperature index represents the change in global surface temperature relative to 1951-1980 average temperatures. Despite some ups and downs, we can see that Earth’s surface continues to significantly warm, with recent global temperatures being the hottest in the past 2,000-plus years.
+
+```{r fig.height = 7, fig.width = 10, fig.align = 'center'}
+yearly_temp <- read.table('data/clean/graph.txt', header = TRUE)
+
+yearly_temp %>% ggplot(aes(x = Year, y=No_Smoothing)) + geom_smooth(method = 'loess', span = 0.2, formula = y~x, se = TRUE) +
+  geom_point(color = 'black', size = 0.5, alpha = 0.8)  + theme_grey(16) +
+  xlab("Year") + ylab("Temperature Index") +
+  theme(plot.title = element_text(size = 15, face = "bold"))
+
+```
+
+
+The global warming has indeed impacted significantly on each and every continent for the past century. The following graphs show the pattern of the average temperature since 1950.
+
+```{r fig.height = 7, fig.width = 10, fig.align = 'center'}
+temp_by_cont <- read.table('data/clean/temp_by_cont.txt', header =TRUE, sep='\t', row.names = 1)
+colnames(temp_by_cont) = c(1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020)
+ggplot(melt(t(temp_by_cont)), aes(Var1, value)) +  
+  geom_label(aes(label = Var1)) +  
+  geom_line(color = "blue") + facet_wrap(~ Var2, scales="free") + xlab('Year') + 
+  ylab('Average Temperature')
+```
+To take a closer look on what has happened around the world in terms of temperature change, the following plots show the temperature in Celsius globally in a world map currently compared to 60 years ago. We can see that many places have become hotter based on the redness of each region.
+
+```{r}
+first <- raster( "data/clean/1960_tmax.gri")
+third <- raster( "data/clean/2020_tmax.gri")
+```
+
+```{r fig.height = 6, fig.width = 11, fig.align = 'center' }
+plot(first, col=rev(heat.colors(48)), main = 'Avg Temperature at 1960 Spring', ylim = c(-100, 100), zlim = c(-50,50), xlab = 'Latitute', ylab = 'Longtitude')
+
+plot(third, col=rev(heat.colors(48)), main = 'Avg Temperature at 2020 Spring', ylim = c(-100, 100), zlim = c(-50,50), xlab = 'Latitute', ylab = 'Longtitude')
+```
+
+Finally, to wrap up what we found globally, we plot the following heat map by taking a closer look at the temperature change pattern monthly. The plot captures the average temperature difference with respect to the global mean value since 1950. 
+
+```{r fig.height=10, fig.width=12, fig.align = 'center'}
+temp_dat_monthly = read.csv('data/clean/temp_dat_monthly.csv', header = TRUE)
+gg <- ggplot(temp_dat_monthly, aes(x=year, y=month, fill=anomaly))
+gg <- gg + geom_tile(color="white", size=0.1)
+gg <- gg + scale_fill_viridis(name="Difference from \nAverage in °C",option="inferno")
+#plot.title = 'Average World Temperature since 1850'
+gg <- gg + ggtitle('World Temperature Difference from Avgerage since 1850') 
+gg <- gg + labs(x=NULL, y=NULL)
+
+gg <- gg + theme_tufte(base_family="Helvetica")
+
+dgr_fmt <- function(x, ...) {
+  parse(text = paste(x, "", sep = ""))
+}
+
+a <- dgr_fmt(seq(1850,2015, by=30))
+gg <- gg +
+  coord_cartesian(xlim = c(1850,2015)) +
+  scale_x_continuous(breaks = seq(1850,2015, by=30), labels = a) +
+  scale_y_continuous(expand = c(0, 0), 
+                     breaks = c(1,2,3,4,5,6,7,8,9,10,11,12),
+                     labels = c("Jan", "Feb", "Mar", "Apr",
+                                "May", "Jun", "Jul", "Aug", "Sep",
+                                "Oct", "Nov", "Dec"))
+gg <- gg + ggtitle('Average World Temperature since 1850') 
+gg <- gg + theme(plot.title = element_text(hjust = 0.5))
+gg <- gg + theme(axis.ticks=element_blank())
+gg <- gg + theme(axis.text=element_text(size=7)) 
+gg
+```
+
+
+
+
 ## Main causes of climate change
 In the past more than a hundred years, the global land-ocean temperature kept increasing. So we plan to figure out what leads to the current warming trend. In the following discussion, we explore the effects of natural factors and human activities on temperature.
 
 ### Natural causes
 Changes of the Earth's orbit around the sun and the tilt of the Earth's axis define the sequence of glaciation periods and warm periods, and influence the climate on Earth by changing the energy the Earth could receive from the sun. Thus the metrics of Earth's orbit and the solar irradiation are taken into account for the natural causes of climate change. In 1930s, Milutin Milankovitch introduced the concept of Milankovich cycles to describe the changes of Earth's orbit, which includes eccentricity to describe the shape of Earth's orbit, obliquity and precession to describe the Earth's axis. Eccentricity = (aphelion-perihelion)/(aphelion+perihelion). Obliquity is the angle Earth's axis of rotation is tilted as it travels around the Sun. And insolation, which denotes the daily mean solar irradiation at the top of Earth's atmosphere, is introduced to show the irradiation the Earth receives from the sun. The following shows the changes of eccentricity, obliquity and insolation in the past around five thousand years from 2800s BC to now. 
 
+
+
+
 ```{r fig.height = 7, fig.width = 10}
 orbit <- read.table("data/raw/milankovitch.data.txt", header = TRUE, skip = 7, sep = "\t")
-orbit_5k <- orbit %>% select(time, eccentricity, obliquity, insolation) %>% transform(time = time + 2021) %>% filter(time <= 2021)
+orbit_5k <- orbit %>% dplyr::select(time, eccentricity, obliquity, insolation) %>% transform(time = time + 2021) %>% filter(time <= 2021)
 orbit_pivot <- orbit_5k %>% pivot_longer(cols = !time, names_to = "metric", values_to = "value")
 orbit_pivot$metric <- orbit_pivot$metric %>% fct_relevel("eccentricity","obliquity","insolation")
 labels <- c(`eccentricity`="Eccentricity", `obliquity`="Obliquity (radians)", `insolation` = "Insolation (W/m^2)")
 orbit_pivot %>% ggplot(aes(x = time, y=value)) + geom_smooth(formula = y~x, se = TRUE) +
   geom_point(color = 'black', size = 0.5, alpha = 0.5) + 
   facet_wrap(~metric, scales = "free", ncol = 1, labeller = as_labeller(labels)) + theme_grey(16) +
-  ggtitle("Eccentricity, Obliquity, Insolation (2529 BC to 2332 AD)") + xlab("Year") + ylab("") +
+  ggtitle("Eccentricity, Obliquity, Insolation") + xlab("Year") + ylab("") +
   theme(plot.title = element_text(size = 15, face = "bold"))
 ```
 
@@ -30,13 +116,13 @@ In the past five thousand year period, all three metrics fluctuates periodically
 Then we focus more on the recent 200 years. 
 
 ```{r fig.height = 7, fig.width = 10}
-orbit2 <- orbit %>% select(time, eccentricity, obliquity, insolation) %>% transform(time = time + 2021) %>% filter(time <= 2021 & time >= 1800)
+orbit2 <- orbit %>% dplyr::select(time, eccentricity, obliquity, insolation) %>% transform(time = time + 2021) %>% filter(time <= 2021 & time >= 1800)
 orbit_pivot2 <- orbit2 %>% pivot_longer(cols = !time, names_to = "metric", values_to = "value")
 orbit_pivot2$metric <- orbit_pivot2$metric %>% fct_relevel("eccentricity","obliquity","insolation")
 orbit_pivot2 %>% ggplot(aes(x = time, y=value)) + geom_smooth(formula = y~x, se = TRUE) +
   geom_point(color = 'black', size = 0.5, alpha = 0.8) + 
   facet_wrap(~metric, scales = "free", ncol = 1, labeller = as_labeller(labels)) + theme_grey(16) +
-  ggtitle("Eccentricity, Obliquity, Insolation (1800 to 2021)") + xlab("year") + ylab("") +
+  ggtitle("Eccentricity, Obliquity, Insolation") + xlab("year") + ylab("") +
   theme(plot.title = element_text(size = 15, face = "bold"))
 ```
 
@@ -44,6 +130,7 @@ In the short term, both obliquity and isolation have relatively smooth cycle cha
 
 To have a better insight of the relationship between these natural causes and temperature, we use the data from 1880 to draw the scatter plots and make linear fitting. In the plot, the color of points denotes the corresponding year.
 ```{r fig.height = 7, fig.width = 10}
+
 temp_yearly <- read.table("data/clean/temp_yearly.csv", header = TRUE, sep = ",")
 temp_orbit_pivot = temp_yearly %>% inner_join(orbit_pivot, by = c("Year" = "time")) %>% drop_na
 temp_orbit_pivot %>% ggplot(aes(value, temp, color = Year)) + 
@@ -86,7 +173,7 @@ gas_rate_pivot %>% ggplot(aes(x = year, y=rate)) +
 Although from 1999 to 2006, the mole fraction of CH$_4$ displays a negative growth or a small growth rate, in other years from 1880s to now, its growth rate is much larger than other gases. The growth rates of other three gases are relatively small, but show a continuous increasing trend. Then we analyze the relationships between the gas concentration in the atmosphere and global temperature by drawing scatter plots and hexagonal heatmaps. Every point in scatter plots denotes mean temperature and mean mole fraction in one month from Jan 2001 to Aug 2021.The color indicates to the time in scatter plots while indicates to the density of data points in hexagonal heatmaps. 
 ```{r fig.height = 7, fig.width = 10}
 temp_monthly <- read.table("data/clean/temp_monthly.csv", header = TRUE, sep = ",") %>% transform(time = as.yearmon(time))
-temp_gas_pivot = temp_monthly %>% inner_join(gh_gas_pivot, by = c("time" = "time")) %>% filter(time >= as.yearmon("Jan 2001")) %>% rename(Time = decimal)
+temp_gas_pivot = temp_monthly %>% inner_join(gh_gas_pivot, by = c("time" = "time")) %>% filter(time >= as.yearmon("Jan 2001")) %>% dplyr::rename(Time = decimal)
 temp_gas_pivot %>% ggplot(aes(value, temp, color = Time)) + 
   geom_point(alpha = 1, stroke = 0, size = 2) + 
   geom_smooth(method = "lm", se=FALSE, color="red") + 
@@ -165,7 +252,6 @@ Sea level rise is a slow-onset natural disaster to human survival and economic d
 ```{r}
 tt <- read.table("data/clean/sea_level_GMSL_TPJAOS_5.1_199209_202108.txt", skip = 48)
 head(tt)
-
 
 tt %>% ggplot(mapping = aes(x = V3, y = V6, group = 1)) + 
   geom_line(color=4) + xlab('Year') +

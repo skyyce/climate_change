@@ -1,2 +1,27 @@
 # Data sources
 
+## Data for patterns of climate change
+
+1. [HadCRUT](https://crudata.uea.ac.uk/cru/data/temperature), which is a global temperature dataset, providing gridded temperature anomalies across the world as well as averages for the hemispheres and the globe as a whole.
+
+2. The GISS Surface Temperature Analysis ver. 4 ([GISTEMP v4](https://data.giss.nasa.gov/gistemp/)) is an estimate of global surface temperature change.
+
+3. The [WorldData](https://www.worlddata.info/global-warming.php), which provides the pattern of temperature change by by continents from 1950 to 2020.
+
+4. THE [NACR](https://climatedataguide.ucar.edu/climate-data/terraclimate-global-high-resolution-gridded-temperature-precipitation-and-other-water) data, which provides high resolution gridded temperature data for world map plotting
+
+
+## Data for causes of climate change
+5. [Orbital Data](https://biocycle.atmos.colostate.edu/shiny/Milankovitch/) contains Milankovitch orbital data of Earth.
+
+6. Globally averaged marine surface monthly mean mole fraction of gas from NOAA, including data of  [CO$_2$](https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_gl.txt), [CH$_4$](https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_mm_gl.txt), [N$_2$O](https://gml.noaa.gov/webdata/ccgg/trends/n2o/n2o_mm_gl.txt), [SF$_6$](https://gml.noaa.gov/webdata/ccgg/trends/sf6/sf6_mm_gl.txt).
+
+7. Globally averaged marine surface annual mean mole fraction of gas from NOAA, including data of  [CO$_2$](https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_annmean_gl.txt), [CH$_4$](https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_annmean_gl.txt), [N$_2$O](https://gml.noaa.gov/webdata/ccgg/trends/n2o/n2o_annmean_gl.txt), [SF$_6$](https://gml.noaa.gov/webdata/ccgg/trends/sf6/sf6_annmean_gl.txt).
+
+8. Globally averaged marine surface annual mean growth rates of gas from NOAA, including data of [CO$_2$](https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_gr_gl.txt), [CH$_4$](https://gml.noaa.gov/webdata/ccgg/trends/ch4/ch4_gr_gl.txt), [N$_2$O](https://gml.noaa.gov/webdata/ccgg/trends/n2o/n2o_gr_gl.txt), [SF$_6$](https://gml.noaa.gov/webdata/ccgg/trends/sf6/sf6_gr_gl.txt).
+
+## Data for effects of climate change
+
+9. The three data sets about [ice sheet mass in Antarctic](https://podaac-tools.jpl.nasa.gov/drive/files/allData/tellus/L4/ice_mass/RL06/v02/mascon_CRI//antarctica_mass_200204_202109.txt), [ice sheet mass in Greenland](https://podaac-tools.jpl.nasa.gov/drive/files/allData/merged_alt/L2/TP_J1_OSTM/global_mean_sea_level//GMSL_TPJAOS_5.1_199209_202108.txt) and [Global sea level change](http://podaac.jpl.nasa.gov/dataset/MERGED_TP_J1_OSTM_OST_ALL_V51) are from NASA_EARTH_DATA.
+
+10. [Storm Events](https://www.climate.gov/maps-data/dataset/severe-storms-and-extreme-events-data-table) data collected by the National Weather Service records the extreme storm events from 1950 to 2021.

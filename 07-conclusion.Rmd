@@ -1,2 +1,5 @@
 # Conclusion
 
+With climate change being a long-lasting phenomenon, we learnt that data sometimes should be presented in different ways and at different levels to fully capture the rich information for a wide time window.  Although visualization is a stronger communication method to the public but we also need to be cautious so that we can stay unbiased when utilizing the data. Without the lack of assistance from text, graphs and plots may be interpreted in different ways. Therefore, we must keep our questions clear and well-defined before we dive into the design of our visualization.
+
+Based on the above visualization and analysis, we have investigated the general patterns of the global warming and the causes and effects for this change. However, climate change is a very wide topic and there are many related issues that are left undiscussed such as how early did the global warming start? As climate change may influence everyone’s life in different ways, rather than a comprehensive analysis of this topic, our project aims to provide an easy-to-understand view for readers to re-visit the climate change and provoke new perspective to this problem. 

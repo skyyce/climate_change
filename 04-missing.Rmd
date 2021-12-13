@@ -1,10 +1,13 @@
 # Missing values
-There is no missing values found from our data source. Here we use steak survey dataset for analysis.
+There is no missing value found from our raw data source, partly for the reason that all the data sets we use are about climate and most are provided by NASA and NOAA. Here are missing value plots of some data sets.
+```{r}
+library(tidyverse)
+library(patchwork)
+```
 
 ```{r}
-plot_missing <- function(b,percent=FALSE){
-  library(tidyverse)
-  library(patchwork)
+plot_missing <- function(b,percent=FALSE, subtitle=""){
+
   dt1 <-  as.data.frame(colSums(apply(b,2,is.na)))
   colnames(dt1) <- "num"
   dt1 <- arrange(dt1,desc(num))
@@ -14,7 +17,7 @@ plot_missing <- function(b,percent=FALSE){
   p1 <- ggplot(dt1 ,aes(x = x,y =num))+geom_bar(stat = "identity",fill = "lightblue")+
     ylab("num rows\nmissing:")+
     xlab("")+
-    ggtitle("Missing value patterns")+
+    ggtitle("Missing value patterns", subtitle = subtitle)+
     theme_bw()+
     theme(panel.grid.major.x  = element_blank())+
     scale_y_continuous(breaks = c(0,10,20))
@@ -22,7 +25,7 @@ plot_missing <- function(b,percent=FALSE){
   p1_ <- ggplot(dt1 ,aes(x = x,y =(num/nrow(b))*100))+geom_bar(stat = "identity",fill = "lightblue")+
     ylab("% rows\nmissing:")+
     xlab("")+
-    ggtitle("Missing value patterns")+
+    ggtitle("Missing value patterns", subtitle = subtitle)+
     theme_bw()+
     theme(panel.grid.major.x  = element_blank())+
     ylim(0,100)
@@ -77,50 +80,20 @@ plot_missing <- function(b,percent=FALSE){
 ```
 
 
-## Analysis
-
-We first load our steak survey data which has 550 observation with 14 columns. (First column is the Respondent ID so we set it as row names)
 ```{r}
-library('fivethirtyeight')
-steak_survey = as.data.frame(steak_survey) 
-ss = data.frame(steak_survey[,-1], row.names=steak_survey[,1])
-print(dim(ss))
+yearly_temp <- read.table('data/clean/graph.txt', header = TRUE)
+plot_missing(yearly_temp, subtitle = "Global Yearly Temperature")
 ```
 
-### Missing counts by column
 ```{r}
-library(tidyverse)
-colSums(is.na(ss)) %>%
-  sort(decreasing = TRUE)
+CO2 <- read.table("https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_gl.txt", header = FALSE, comment.char = "#")
+plot_missing(CO2, subtitle = "Global Monthly CO2")
 ```
-In the survey a lot of respondent did not provide their income and steak preference. The missing values from household income may stem from people's privacy concern. As for the steak preference column, some people may not be steak eater and therefore cannot provide a informative response.
 
-### Missing counts by row
 ```{r}
-rowSums(is.na(ss))[rowSums(is.na(ss))>0] %>% 
-  sort(decreasing = TRUE)
+df <- read.table("data/clean/ice_sheet_antarctica_mass_200204_202109.txt",
+                 skip=31,
+                 col.names = c('TIME', 'antarctica', 'antarctica_sigma'))
+plot_missing(CO2, subtitle = "Ice Sheet Mass in Antarctica")
 ```
-Based on the missing counts by row, we can see that most of the respondents answer all the questions. Only a few refuse to answer most of the questions. And there are about 20% of respondent has one response missing. It may be the result of missing value from column 'steak_prep' and 'hhold_income'
 
-### Row / column missing patterns from heatmap
-```{r}
-library(mi)
-ss_df <- as.data.frame(ss)
-x <- missing_data.frame(ss_df)
-image(x)
-```
-From the plot above we can see some strong pattern correltion between varialbe 'steak' and the missingness of variable 'steak_prep'. There is no description for the column 'steak', based on this corrlation, we inspect it as an indicator on whether the respondent is a steak eater or not. 
-
-### Missing Partern Investigation
-```{r fig.height = 9, fig.width = 15}
-plot_missing(ss)
-```
-There are total 22 missing patterns found in the steak survey dataset. 
-
-1. We see that most of the observation is complete. 
-2. The two most common missing pattern are caused by the missing of steak preference and househould income. We can see that there is no strong correlation between the missingness of 'steak preference' and 'household income'. 
-3. The sixth missing pattern is quite intersting, a few people only respond the question 'lotter_a'. From the description of the data, we suspect that it is probably the first question in the survey, those respondents probably get inpatient and abondon the survey. 
-4. For the seventh missing pattern, the respondents only finish first part of the survey, those question that may contain their personal information are missing, those respondents may hold some privacy concern on this survey.
-
-## Summary
-Based on the above analysis, we should probably discard datapoints from those 'impatient' respondent and they contain no information. Moreover, those respondents who refuse to answer any personal questions may also be discarded, as they contribute nothing to our analysis of steak preference. For the missing value from steak_prep, they can probably be considered as a new class, which is 'unsure/no preference'. And for the household income column, the majority of the data are still present, and they might be a informative column to predict the steak preference, we may use some technique to impute the values.

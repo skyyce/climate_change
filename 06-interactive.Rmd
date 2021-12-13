@@ -1,3 +1,10 @@
 # Interactive component
 
+[Maps showing number of droughts in the U.S. (2012-2021)](https://vizhub.com/skyyce/a1519407276147fdabe6c3e639270aa6?edit=files&file=index.html&mode=full)
+
+We use data of extreme weather events to make this interactive graph. We chose a typical event: Drought to make visulization over the U.S. map.
+This graph shows the number of doughts happened at each state of the U.S. in year 2012-2021. Users can simply select a year to view the map by clicking the "Select Year" button.
+Also, when clicking on a specific state, it will pop up the information about: "State name" and "number of events".
+The drought in East Africa has triggered discussions in the scientific community about global warming. When global warming, a hypothesis that is still very controversial in the scientific community, became an important international political issue, more and more scientists questioned: Are extreme weather such as droughts really caused by global warming?
+From this interactive graph, users can view the number of droughts in various parts of the United States in the past ten years for comparison. From our perspective, although the temperature has increased in recent years, the number of droughts in various places has decreased. Global warming does not seem to be directly related to drought.
 

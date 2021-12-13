@@ -7,3 +7,6 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+To many ones’ surprise, the winner of 2021’s Noble Prize in physics has been awarded to scientists who warned the world of climate change. This big news drew more attention to the topic of global warming which have become a seemingly cliché. In fact, climate change affects everything from politics to economies to our well-being, while it has been well-studied among scientists, the understanding of the climate change is still limited to the public. By reviewing this heated topic, our group have discovered some interesting findings like what are some causes that remain unknown to the public and how the climate change has become a threat to peoples’ daily life?
+
+However, delivering information via plain texts sometimes is not sufficient to get people emotionally moved by this phenomenon, our goal here is to find the general pattern for the climate change the causes as well as the effects for the climate change using visualization, to help people get a better understanding to this essential topic of 21th century.
